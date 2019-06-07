@@ -27,9 +27,9 @@ class VisualizeDataset:
 
         # Create subplots if more columns are specified.
         if len(columns) > 1:
-            f, xar = plot.subplots(len(columns), sharex=True, sharey=False)
+            f, xar = plot.subplots(len(columns), figsize=(15,10), sharex=True, sharey=False)
         else:
-            f, xar = plot.subplots()
+            f, xar = plot.subplots(figsize=(15,10))
             xar = [xar]
 
         f.subplots_adjust(hspace=0.4)
@@ -62,8 +62,8 @@ class VisualizeDataset:
                     xar[i].plot(data_table.index[mask], data_table[relevant_dataset_cols[j]][mask], self.point_displays[j%len(self.point_displays)])
                 else:
                     xar[i].plot(data_table.index[mask], data_table[relevant_dataset_cols[j]][mask], self.line_displays[j%len(self.line_displays)])
-            xar[i].tick_params(axis='y', labelsize=10)
-            xar[i].legend(relevant_dataset_cols, fontsize='xx-small', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
+            xar[i].tick_params(axis='y', labelsize=18)
+            xar[i].legend(relevant_dataset_cols, fontsize='small', numpoints=1, loc='upper center',  bbox_to_anchor=(0.5, 1.3), ncol=len(relevant_dataset_cols), fancybox=True, shadow=True)
             xar[i].set_ylim([min(min_values) - 0.1*(max(max_values) - min(min_values)), max(max_values) + 0.1*(max(max_values) - min(min_values))])
         # Make sure we get a nice figure with only a single x-axis and labels there.
         plot.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
@@ -91,16 +91,16 @@ class VisualizeDataset:
     def plot_binary_outliers(self, data_table, col, outlier_col):
         data_table = data_table.dropna(axis=0, subset=[col, outlier_col])
         data_table[outlier_col] = data_table[outlier_col].astype('bool')
-        f, xar = plot.subplots()
+        f, xar = plot.subplots(figsize=(10,5))
         plot.hold(True)
         xfmt = md.DateFormatter('%H:%M')
         xar.xaxis.set_major_formatter(xfmt)
-        plot.xlabel('time')
-        plot.ylabel('value')
+        plot.xlabel('time', fontsize=14)
+        plot.ylabel('value', fontsize=14)
         # Plot data points that are outliers in red, and non outliers in blue.
         xar.plot(data_table.index[data_table[outlier_col]], data_table[col][data_table[outlier_col]], 'r+')
         xar.plot(data_table.index[~data_table[outlier_col]], data_table[col][~data_table[outlier_col]], 'b+')
-        plot.legend(['outlier ' + col, 'no outlier' + col], numpoints=1, fontsize='xx-small', loc='upper center',  ncol=2, fancybox=True, shadow=True)
+        plot.legend(['outlier ' + col, 'no outlier' + col], numpoints=1, fontsize=14, loc='upper center',  ncol=2, fancybox=True, shadow=True)
         plot.hold(False)
         plot.show()
 
